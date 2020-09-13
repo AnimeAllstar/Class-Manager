@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EnglishClasses.EditStudentController">
+   <children>
+      <Pane fx:id="paneStudent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #fff;">
+         <children>
+            <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+               <top>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="11.0" prefWidth="600.0" style="-fx-background-color: #00B558;" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label prefHeight="117.0" prefWidth="562.0" text="   Edit Student - Student Details" />
+                        <Button fx:id="closeButton1" alignment="CENTER_RIGHT" blendMode="DARKEN" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#closeButtonAction" style="-fx-border-color: #fff;" textAlignment="RIGHT" textFill="WHITE">
+                           <graphic>
+                              <FontAwesomeIconView fill="#3c3c3c" glyphName="CLOSE" size="25" textAlignment="RIGHT" />
+                           </graphic>
+                        </Button>
+                     </children>
+                  </HBox>
+               </top>
+               <center>
+                  <GridPane alignment="CENTER" prefHeight="426.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="347.0" minWidth="10.0" prefWidth="289.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="347.0" minWidth="10.0" prefWidth="311.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <JFXTextField fx:id="firstName" focusColor="#00b558" labelFloat="true" promptText="Enter First Name*">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXTextField fx:id="lastName" focusColor="#00b558" labelFloat="true" promptText="Enter Last Name*" GridPane.columnIndex="1">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXTextField fx:id="standard" focusColor="#00b558" labelFloat="true" promptText="Enter Standard*" GridPane.rowIndex="1">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXTextField fx:id="school" focusColor="#00b558" labelFloat="true" promptText="Enter School*" GridPane.rowIndex="2">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXTextArea fx:id="notes" focusColor="#00b558" labelFloat="true" prefHeight="57.0" prefWidth="550.0" promptText="Notes" GridPane.columnSpan="2" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                           </GridPane.margin>
+                        </JFXTextArea>
+                        <JFXDatePicker fx:id="DOB" defaultColor="#00b558" promptText="Enter Date of Birth" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets bottom="10.0" left="25.0" right="25.0" />
+                           </GridPane.margin>
+                        </JFXDatePicker>
+                     </children>
+                  </GridPane>
+               </center>
+            </BorderPane>
+            <JFXButton fx:id="next" buttonType="RAISED" layoutX="242.0" layoutY="408.0" onAction="#changePane" prefHeight="67.0" prefWidth="116.0" ripplerFill="BLACK" text="Next" />
+         </children>
+      </Pane>
+      <Pane fx:id="paneParent" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #fff;">
+         <children>
+            <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+               <top>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="11.0" prefWidth="600.0" style="-fx-background-color: #00B558;" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label prefHeight="117.0" prefWidth="562.0" text="   Edit Student - Parent Details" />
+                        <Button fx:id="closeButton1" alignment="CENTER_RIGHT" blendMode="DARKEN" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#closeButtonAction" style="-fx-border-color: #fff;" textAlignment="RIGHT" textFill="WHITE">
+                           <graphic>
+                              <FontAwesomeIconView fill="#3c3c3c" glyphName="CLOSE" size="25" textAlignment="RIGHT" />
+                           </graphic>
+                        </Button>
+                     </children>
+                  </HBox>
+               </top>
+               <center>
+                  <GridPane alignment="CENTER" BorderPane.alignment="CENTER">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <JFXTextField fx:id="parentFirstName" focusColor="#00b558" labelFloat="true" promptText="Enter First Name">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXTextField fx:id="parentLastName" focusColor="#00b558" labelFloat="true" promptText="Enter Last Name" GridPane.columnIndex="1">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXTextField fx:id="parentContact" focusColor="#00b558" labelFloat="true" promptText="Enter Home Phone Number" text="Enter Contact Number" GridPane.rowIndex="1">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXTextField fx:id="parentEmail" focusColor="#00b558" labelFloat="true" promptText="Enter E-mail Address" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                     </children>
+                  </GridPane>
+               </center>
+            </BorderPane>
+            <JFXButton fx:id="finish" buttonType="RAISED" layoutX="350.0" layoutY="392.0" onAction="#changePane" prefHeight="67.0" prefWidth="116.0" ripplerFill="BLACK" text="Finish" />
+            <JFXButton fx:id="back" buttonType="RAISED" layoutX="156.0" layoutY="392.0" onAction="#changePane" prefHeight="67.0" prefWidth="116.0" ripplerFill="BLACK" text="Back" />
+         </children>
+      </Pane>
+      <Pane fx:id="paneId" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #fff;">
+         <children>
+            <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0">
+               <top>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="11.0" prefWidth="600.0" style="-fx-background-color: #00B558;" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label prefHeight="117.0" prefWidth="600.0" text="   Edit Student" />
+                        <Button fx:id="closeButton" alignment="CENTER_RIGHT" blendMode="DARKEN" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#closeButtonAction" style="-fx-border-color: #fff;" textAlignment="RIGHT" textFill="WHITE">
+                           <graphic>
+                              <FontAwesomeIconView fill="#3c3c3c" glyphName="CLOSE" size="25" textAlignment="RIGHT" />
+                           </graphic>
+                        </Button>
+                     </children>
+                  </HBox>
+               </top>
+               <center>
+                  <GridPane BorderPane.alignment="CENTER">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="336.0" minWidth="10.0" prefWidth="335.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="245.0" minWidth="10.0" prefWidth="165.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <JFXButton fx:id="edit" onAction="#changePane" prefHeight="67.0" prefWidth="116.0" ripplerFill="BLACK" text="Edit" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="50.0" />
+                           </GridPane.margin></JFXButton>
+                        <JFXTextField fx:id="idField" focusColor="#00b558" labelFloat="true" promptText="Enter Student ID" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="60.0" right="30.0" />
+                           </GridPane.margin>
+                        </JFXTextField>
+                        <Label fx:id="alert" textFill="RED" GridPane.rowIndex="2">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <GridPane.margin>
+                              <Insets bottom="50.0" left="150.0" />
+                           </GridPane.margin>
+                        </Label>
+                     </children>
+                  </GridPane>
+               </center>
+            </BorderPane>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
