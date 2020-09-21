@@ -6,18 +6,17 @@
 package EnglishClasses;
 
 import com.jfoenix.controls.JFXTextField;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.stage.Stage;
-import java.util.Random;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
+
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.Random;
+import java.util.ResourceBundle;
 
 /**
  * FXML Controller class
@@ -35,11 +34,11 @@ public class AddClassController implements Initializable {
     private JFXTextField fee, description, duration;
 
     @FXML
-    private void completeEntry(ActionEvent event) throws SQLException, IOException, FileNotFoundException, ClassNotFoundException {
+    private void completeEntry(ActionEvent event) throws SQLException {
         if (isClassFull()) {
             String i = (duration.getText()).trim();
             String d = fee.getText().trim();
-            if (obj.validateClass(i,d)) {
+            if (obj.validateClass(i, d)) {
                 addClass();
                 closeButtonAction();
             }
@@ -56,11 +55,7 @@ public class AddClassController implements Initializable {
         String f = fee.getText().trim();
         String d = (duration.getText()).trim();
         String s = description.getText().trim();
-        if (f.equals("") || d.equals("") || s.equals("")) {
-            return false;
-        } else {
-            return true;
-        }
+        return !f.equals("") && !d.equals("") && !s.equals("");
     }
 
     /*@FXML
@@ -79,7 +74,7 @@ public class AddClassController implements Initializable {
         double f = Double.parseDouble(fee.getText());
         int d = Integer.parseInt(duration.getText());
 
-        String classId = new StringBuilder().append("c").append(new Random().nextInt(99999 - 10000) + 10000).toString();
+        String classId = "c" + (new Random().nextInt(99999 - 10000) + 10000);
         obj.addClass(classId, f, description.getText().trim(), d);
         System.out.println("Class Added");
     }

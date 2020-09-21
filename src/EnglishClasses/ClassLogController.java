@@ -5,13 +5,6 @@
  */
 package EnglishClasses;
 
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,6 +14,14 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * FXML Controller class
  *
@@ -28,13 +29,10 @@ import javafx.stage.Stage;
  */
 public class ClassLogController implements Initializable {
 
+    public ObservableList<ClassLog> ClassLogData = FXCollections.observableArrayList();
     EnglishClasses obj = new EnglishClasses();
-
     @FXML
     private javafx.scene.control.Button closeButton;
-
-    public ObservableList<ClassLog> ClassLogData = FXCollections.observableArrayList();
-
     @FXML
     private TableView<ClassLog> classLogTableView;
     @FXML
@@ -51,7 +49,7 @@ public class ClassLogController implements Initializable {
     private TableColumn<ClassLog, Double> cFeeCol;
     @FXML
     private TableColumn<ClassLog, String> cDateCol;
-    
+
     @FXML
     private void closeButtonAction() {
         // get a handle to the stage
@@ -95,25 +93,25 @@ public class ClassLogController implements Initializable {
 
         // Set up the table data
         sIdCol.setCellValueFactory(
-                new PropertyValueFactory<ClassLog, String>("studentId")
+                new PropertyValueFactory<>("studentId")
         );
         sNameCol.setCellValueFactory(
-                new PropertyValueFactory<ClassLog, String>("fullName")
+                new PropertyValueFactory<>("fullName")
         );
         cIdCol.setCellValueFactory(
-                new PropertyValueFactory<ClassLog, String>("classId")
+                new PropertyValueFactory<>("classId")
         );
         cDescriptionCol.setCellValueFactory(
-                new PropertyValueFactory<ClassLog, String>("classDescription")
+                new PropertyValueFactory<>("classDescription")
         );
         cFeeCol.setCellValueFactory(
-                new PropertyValueFactory<ClassLog, Double>("classFee")
+                new PropertyValueFactory<>("classFee")
         );
         cPaymentCol.setCellValueFactory(
-                new PropertyValueFactory<ClassLog, String>("classPayment")
+                new PropertyValueFactory<>("classPayment")
         );
         cDateCol.setCellValueFactory(
-                new PropertyValueFactory<ClassLog, String>("classDate")
+                new PropertyValueFactory<>("classDate")
         );
 
         classLogTableView.setItems(ClassLogData);
@@ -127,9 +125,7 @@ public class ClassLogController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try {
             loadClassLogData();
-        } catch (SQLException ex) {
-            Logger.getLogger(ClassLogController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ClassLogController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

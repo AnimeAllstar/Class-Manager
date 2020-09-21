@@ -9,15 +9,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Random;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,6 +17,15 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Random;
+import java.util.ResourceBundle;
+
 /**
  * FXML Controller class
  *
@@ -33,14 +33,13 @@ import javafx.stage.Stage;
  */
 public class AddStudentController implements Initializable {
 
+    public String sIdRelation, pIdRelation;
     EnglishClasses obj = new EnglishClasses();
-
+    boolean isFound = false;
     @FXML
     private javafx.scene.control.Button closeButton;
-
     @FXML
     private Pane paneStudent, paneParent;
-
     @FXML
     private JFXButton next, back, finish;
     @FXML
@@ -49,9 +48,11 @@ public class AddStudentController implements Initializable {
     private JFXTextArea notes;
     @FXML
     private JFXDatePicker DOB;
+    @FXML
+    private JFXTextField parentFirstName, parentLastName, parentContactNumber, parentEmail;
 
     @FXML
-    private void changePane(ActionEvent event) throws SQLException, IOException, FileNotFoundException, ClassNotFoundException {
+    private void changePane(ActionEvent event) throws SQLException, IOException, ClassNotFoundException {
         JFXButton source = (JFXButton) event.getSource();
         if (source == next) {
             if (isStudentFull()) {
@@ -92,7 +93,8 @@ public class AddStudentController implements Initializable {
     }
 
     public boolean isStudentFull() {
-        if (standard.getText().trim() == null || DOB.getValue() == null || school.getText().trim() == null || lastName.getText().trim() == null || firstName.getText().trim() == null) {
+        standard.getText();
+        if (DOB.getValue() == null || school.getText().trim() == null || firstName.getText().trim() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR, " ", ButtonType.OK);
             alert.setTitle("New Student Entry");
             alert.setHeaderText("Empty Text Field");
@@ -116,10 +118,10 @@ public class AddStudentController implements Initializable {
         stage.close();
     }
 
-    public void addStudent() throws SQLException, FileNotFoundException, IOException, ClassNotFoundException {
+    public void addStudent() throws SQLException {
         char fn = Character.toLowerCase(firstName.getText().trim().charAt(0));
         char ln = Character.toLowerCase(lastName.getText().trim().charAt(0));
-        String sId = new StringBuilder().append(fn).append(ln).append(new Random().nextInt(9999 - 1000) + 1000).toString();
+        String sId = String.valueOf(fn) + ln + (new Random().nextInt(9999 - 1000) + 1000);
         sIdRelation = sId;
 
         obj.addstudent(sId, firstName.getText().trim(), lastName.getText().trim(), standard.getText().trim(), DOB.getValue(),
@@ -127,15 +129,10 @@ public class AddStudentController implements Initializable {
         System.out.println("Student Added");
     }
 
-    @FXML
-    private JFXTextField parentFirstName, parentLastName, parentContactNumber, parentEmail;
-
-    public String sIdRelation, pIdRelation;
-
     public void addParent() throws SQLException, IOException {
         char fn = Character.toLowerCase(parentFirstName.getText().trim().charAt(0));
         char ln = Character.toLowerCase(parentLastName.getText().trim().charAt(0));
-        String pId = new StringBuilder().append(fn).append(ln).append(new Random().nextInt(9999 - 1000) + 1000).toString();
+        String pId = String.valueOf(fn) + ln + (new Random().nextInt(9999 - 1000) + 1000);
         pIdRelation = pId;
 
         checkParent();
@@ -147,9 +144,7 @@ public class AddStudentController implements Initializable {
         System.out.println("Student Added");
     }
 
-    boolean isFound = false;
-
-    public void checkParent() throws IOException, SQLException {
+    public void checkParent() throws SQLException {
         isFound = false;
         System.out.println("run");
 

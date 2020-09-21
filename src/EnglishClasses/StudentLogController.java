@@ -7,16 +7,6 @@ package EnglishClasses;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -29,6 +19,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * FXML Controller class
  *
@@ -36,17 +36,16 @@ import javafx.stage.Stage;
  */
 public class StudentLogController implements Initializable {
 
+    public Boolean isFound = false;
+    public String name;
+    public ObservableList<StudentLog> StudentLogData;
+    /**
+     * Initializes the controller class.
+     */
+    public Boolean isOpen = false;
+    EnglishClasses obj = new EnglishClasses();
     @FXML
     private javafx.scene.control.Button closeButton;
-
-    @FXML
-    private void closeButtonAction() {
-        // get a handle to the stage
-        Stage stage = (Stage) closeButton.getScene().getWindow();
-        // do what you have to do
-        stage.close();
-    }
-
     @FXML
     private TableView<StudentLog> studentLogTable;
     @FXML
@@ -63,7 +62,6 @@ public class StudentLogController implements Initializable {
     private TableColumn<StudentLog, Double> classFeeCol;
     @FXML
     private TableColumn<StudentLog, String> paymentStatusCol;
-
     @FXML
     private JFXTextField searchId, idField;
     @FXML
@@ -72,13 +70,18 @@ public class StudentLogController implements Initializable {
     private Pane mainPane;
     @FXML
     private Label alert, studentName;
-
     private String studentId;
 
-    public Boolean isFound = false;
+    @FXML
+    private void closeButtonAction() {
+        // get a handle to the stage
+        Stage stage = (Stage) closeButton.getScene().getWindow();
+        // do what you have to do
+        stage.close();
+    }
 
     @FXML
-    private void changePane(ActionEvent event) throws SQLException, IOException, FileNotFoundException, ClassNotFoundException {
+    private void changePane(ActionEvent event) throws SQLException, IOException {
         checkStudent(idField.getText());
         System.out.println(idField.getText());
         if (isFound) {
@@ -89,10 +92,6 @@ public class StudentLogController implements Initializable {
             mainPane.toFront();
         }
     }
-
-    EnglishClasses obj = new EnglishClasses();
-
-    public String name;
 
     public void checkStudent(String enteredId) throws IOException, SQLException {
         isFound = false;
@@ -113,12 +112,10 @@ public class StudentLogController implements Initializable {
             }
         }
 
-        if (isFound == false) {
+        if (!isFound) {
             alert.setText("Incorrect ID entered");
         }
     }
-
-    public ObservableList<StudentLog> StudentLogData;
 
     public void loadStudentLogData(String id) throws SQLException {
         Connection c = obj.connect();
@@ -152,25 +149,25 @@ public class StudentLogController implements Initializable {
 
         // Set up the table data
         classIdCol.setCellValueFactory(
-                new PropertyValueFactory<StudentLog, String>("classId")
+                new PropertyValueFactory<>("classId")
         );
         classDescriptionCol.setCellValueFactory(
-                new PropertyValueFactory<StudentLog, String>("summary")
+                new PropertyValueFactory<>("summary")
         );
         classDateCol.setCellValueFactory(
-                new PropertyValueFactory<StudentLog, String>("date")
+                new PropertyValueFactory<>("date")
         );
         studentFeedbackCol.setCellValueFactory(
-                new PropertyValueFactory<StudentLog, String>("feedback")
+                new PropertyValueFactory<>("feedback")
         );
         classDurationCol.setCellValueFactory(
-                new PropertyValueFactory<StudentLog, Integer>("duration")
+                new PropertyValueFactory<>("duration")
         );
         classFeeCol.setCellValueFactory(
-                new PropertyValueFactory<StudentLog, Double>("fee")
+                new PropertyValueFactory<>("fee")
         );
         paymentStatusCol.setCellValueFactory(
-                new PropertyValueFactory<StudentLog, String>("paymentStatus")
+                new PropertyValueFactory<>("paymentStatus")
         );
 
         studentLogTable.setItems(StudentLogData);
@@ -183,7 +180,7 @@ public class StudentLogController implements Initializable {
     }
 
     @FXML
-    private void searchStudent(ActionEvent event) throws SQLException, IOException, FileNotFoundException, ClassNotFoundException {
+    private void searchStudent(ActionEvent event) throws SQLException, IOException, ClassNotFoundException {
         checkStudent(searchId.getText());
         System.out.println(idField.getText());
         if (isFound) {
@@ -196,28 +193,28 @@ public class StudentLogController implements Initializable {
     }
 
     @FXML
-    private void addRecord(ActionEvent event) throws SQLException, IOException, FileNotFoundException, ClassNotFoundException {
+    private void addRecord(ActionEvent event) throws Exception {
         obj.setId(studentId);
         obj.newWindow("AddClassLog");
         loadStudentLogData(studentId);
     }
 
     @FXML
-    private void editRecord(ActionEvent event) throws SQLException, IOException, FileNotFoundException, ClassNotFoundException {
+    private void editRecord(ActionEvent event) throws Exception {
         obj.setId(studentId);
         obj.newWindow("EditClassLog");
         loadStudentLogData(studentId);
     }
 
     @FXML
-    private void removeRecord(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
+    private void removeRecord(ActionEvent event) throws IOException, SQLException {
         obj.setId(studentId);
         obj.newWindow("RemoveClassLog");
         loadStudentLogData(studentId);
     }
 
     @FXML
-    private void openStudent(ActionEvent event) throws SQLException, IOException, FileNotFoundException, ClassNotFoundException {
+    private void openStudent(ActionEvent event) throws IOException {
 
         if (isOpen) {
             closeButtonAction();
@@ -227,13 +224,8 @@ public class StudentLogController implements Initializable {
         }
     }
 
-    /**
-     * Initializes the controller class.
-     */
-    public Boolean isOpen = false;
-
     //Student Log Controlller
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
@@ -252,9 +244,7 @@ public class StudentLogController implements Initializable {
 
                     obj.deleteId();
 
-                } catch (IOException ex) {
-                    Logger.getLogger(ViewStudentController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
+                } catch (IOException | SQLException ex) {
                     Logger.getLogger(ViewStudentController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {

@@ -7,15 +7,15 @@ package EnglishClasses;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 /**
  * FXML Controller class
@@ -47,10 +47,10 @@ public class RemoveStudentController implements Initializable {
     }
 
     @FXML
-    public void removeStudent(ActionEvent event) throws IOException, SQLException {
+    public void removeStudent(ActionEvent event) throws SQLException {
         System.out.println("run");
         String enteredId = idField.getText();
-        Boolean isSuccessful = obj.removeStudent(enteredId);
+        boolean isSuccessful = obj.removeStudent(enteredId);
         if (isSuccessful) {
             alert.setText("Incorrect ID entered");
         } else {

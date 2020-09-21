@@ -6,7 +6,6 @@
 package EnglishClasses;
 
 /**
- *
  * @author Asad
  */
 public class StudentLog {
@@ -37,52 +36,52 @@ public class StudentLog {
         this.fee = fee;
     }
 
-    public void setClassId(String classId) {
-        this.classId = classId;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public void setPaymentStatus(String paymentStatus) {
-        this.paymentStatus = paymentStatus;
-    }
-
-    public void setFeedback(String feedback) {
-        this.feedback = feedback;
-    }
-
-    public void setDuration(Integer duration) {
-        this.duration = duration;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
     public String getClassId() {
         return classId;
+    }
+
+    public void setClassId(String classId) {
+        this.classId = classId;
     }
 
     public String getDate() {
         return date;
     }
 
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public String getPaymentStatus() {
         return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 
     public String getFeedback() {
         return feedback;
     }
 
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
+
     public Integer getDuration() {
         return duration;
     }
 
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
     public String getSummary() {
         return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     @Override

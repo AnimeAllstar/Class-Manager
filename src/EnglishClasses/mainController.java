@@ -6,14 +6,6 @@
 package EnglishClasses;
 
 import com.jfoenix.controls.JFXButton;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,6 +19,15 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * FXML Controller class
  *
@@ -34,18 +35,13 @@ import javafx.stage.Stage;
  */
 public class mainController implements Initializable {
 
+    public ObservableList<Student> Studentdata = FXCollections.observableArrayList();
+    public ObservableList<Classes> ClassData = FXCollections.observableArrayList();
     EnglishClasses obj = new EnglishClasses();
-
     @FXML
     private javafx.scene.control.Button closeButton;
-
     @FXML
     private Pane paneStudents, paneClass, paneSettings;
-
-    public ObservableList<Student> Studentdata = FXCollections.observableArrayList();
-
-    public ObservableList<Classes> ClassData = FXCollections.observableArrayList();
-
     @FXML
     private TableView<Classes> classTableView;
     @FXML
@@ -83,6 +79,8 @@ public class mainController implements Initializable {
     private TableColumn<Class, Integer> durationCol;*/
     @FXML
     private JFXButton tabStudents, tabClass, tabSettings;
+    @FXML
+    private AnchorPane rootPane;
 
     @FXML
     private void closeButtonAction() {
@@ -111,7 +109,7 @@ public class mainController implements Initializable {
     }
 
     @FXML
-    private void addClassLog(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
+    private void addClassLog(ActionEvent event) throws IOException {
         obj.newWindow("AddClassLog");
     }
 
@@ -135,7 +133,7 @@ public class mainController implements Initializable {
     }
 
     @FXML
-    private void viewClassLog(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
+    private void viewClassLog(ActionEvent event) throws IOException {
         obj.newWindow("ClassLog");
     }
 
@@ -147,10 +145,7 @@ public class mainController implements Initializable {
     }
 
     @FXML
-    private AnchorPane rootPane;
-
-    @FXML
-    private void logOut(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
+    private void logOut(ActionEvent event) throws IOException, ClassNotFoundException {
         AnchorPane pane = FXMLLoader.load(getClass().getResource("Login.fxml"));
         rootPane.getChildren().setAll(pane);
     }
@@ -173,7 +168,7 @@ public class mainController implements Initializable {
     }
 
     @FXML
-    private void changePane(ActionEvent event) throws SQLException, ClassNotFoundException {
+    private void changePane(ActionEvent event) {
         JFXButton source = (JFXButton) event.getSource();
         if (source == tabStudents) {
             obj.showPane(paneStudents);
@@ -207,19 +202,19 @@ public class mainController implements Initializable {
 
         // Set up the table data
         studentIdCol.setCellValueFactory(
-                new PropertyValueFactory<Student, String>("studentId")
+                new PropertyValueFactory<>("studentId")
         );
         firstNameCol.setCellValueFactory(
-                new PropertyValueFactory<Student, String>("firstName")
+                new PropertyValueFactory<>("firstName")
         );
         lastNameCol.setCellValueFactory(
-                new PropertyValueFactory<Student, String>("lastName")
+                new PropertyValueFactory<>("lastName")
         );
         standardCol.setCellValueFactory(
-                new PropertyValueFactory<Student, String>("standard")
+                new PropertyValueFactory<>("standard")
         );
         schoolCol.setCellValueFactory(
-                new PropertyValueFactory<Student, String>("school")
+                new PropertyValueFactory<>("school")
         );
 
         studentTableView.setItems(Studentdata);
@@ -249,16 +244,16 @@ public class mainController implements Initializable {
 
         // Set up the table data
         classIdCol.setCellValueFactory(
-                new PropertyValueFactory<Classes, String>("classId")
+                new PropertyValueFactory<>("classId")
         );
         summaryCol.setCellValueFactory(
-                new PropertyValueFactory<Classes, String>("summary")
+                new PropertyValueFactory<>("summary")
         );
         durationCol.setCellValueFactory(
-                new PropertyValueFactory<Classes, Integer>("duration")
+                new PropertyValueFactory<>("duration")
         );
         feeCol.setCellValueFactory(
-                new PropertyValueFactory<Classes, Double>("fee")
+                new PropertyValueFactory<>("fee")
         );
 
         classTableView.setItems(ClassData);
@@ -307,6 +302,7 @@ public class mainController implements Initializable {
         //classTableView.setItems(data);
         c.close();
     }*/
+
     /**
      * Initializes the controller class.
      */
@@ -315,9 +311,7 @@ public class mainController implements Initializable {
         try {
             loadStudentData();
             loadClassData();
-        } catch (SQLException ex) {
-            Logger.getLogger(mainController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(mainController.class.getName()).log(Level.SEVERE, null, ex);
         }
 

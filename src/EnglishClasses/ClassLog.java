@@ -6,11 +6,10 @@
 package EnglishClasses;
 
 /**
- *
  * @author Asad
  */
-public class ClassLog{
-    
+public class ClassLog {
+
     private String studentId;
     private String classId;
     private String fullName;
@@ -18,7 +17,7 @@ public class ClassLog{
     private double classFee;
     private String classDate;
     private String classPayment;
-    
+
     public ClassLog(String studentId, String classId, String fullName, String classDescription, double classFee, String classDate, String classPayment) {
         this.studentId = studentId;
         this.classId = classId;
@@ -33,8 +32,16 @@ public class ClassLog{
         return studentId;
     }
 
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+
     public String getClassId() {
         return classId;
+    }
+
+    public void setClassId(String classId) {
+        this.classId = classId;
     }
 
     public String getFullName() {
@@ -45,44 +52,36 @@ public class ClassLog{
         return classDescription;
     }
 
-    public double getClassFee() {
-        return classFee;
-    }
-
-    public String getClassDate() {
-        return classDate;
-    }
-
-    public String getClassPayment() {
-        return classPayment;
-    }
-
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
-
-    public void setClassId(String classId) {
-        this.classId = classId;
-    }
-
-    public void setfulltName(String lastName) {
-        this.fullName = lastName;
-    }
-
     public void setClassDescription(String classDescription) {
         this.classDescription = classDescription;
+    }
+
+    public double getClassFee() {
+        return classFee;
     }
 
     public void setClassFee(double classFee) {
         this.classFee = classFee;
     }
 
+    public String getClassDate() {
+        return classDate;
+    }
+
     public void setClassDate(String classDate) {
         this.classDate = classDate;
     }
 
+    public String getClassPayment() {
+        return classPayment;
+    }
+
     public void setClassPayment(String classPayment) {
         this.classPayment = classPayment;
+    }
+
+    public void setfulltName(String lastName) {
+        this.fullName = lastName;
     }
 
     @Override

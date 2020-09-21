@@ -6,15 +6,6 @@
 package EnglishClasses;
 
 import com.jfoenix.controls.JFXTextField;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,8 +14,15 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ResourceBundle;
+
 /**
- *
  * @author Asad
  */
 public class LoginController implements Initializable {
@@ -43,25 +41,6 @@ public class LoginController implements Initializable {
     @FXML
     private AnchorPane rootPane;
 
-    @FXML
-    private void closeButtonAction() {
-        // get a handle to the stage
-        Stage stage = (Stage) closeButton.getScene().getWindow();
-        // do what you have to do
-        stage.close();
-    }
-
-    @FXML
-    private void Login(ActionEvent event) throws IOException, SQLException {
-        if (obj.checkPassword(password.getText())) {
-            createTables();
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("main.fxml"));
-            rootPane.getChildren().setAll(pane);
-        } else {
-            message.setText("Incorrect Password");
-        }
-    }
-
     public static void createStudentTable() {
         // SQLite connection string
         String url = "jdbc:sqlite:database.db";
@@ -77,7 +56,7 @@ public class LoginController implements Initializable {
                 + " NOTES          TEXT)";
 
         try (Connection conn = DriverManager.getConnection(url);
-                Statement stmt = conn.createStatement()) {
+             Statement stmt = conn.createStatement()) {
             // create a new table
             stmt.execute(sql);
         } catch (SQLException e) {
@@ -98,7 +77,7 @@ public class LoginController implements Initializable {
                 + " EMAIL          TEXT    NOT NULL)";
 
         try (Connection conn = DriverManager.getConnection(url);
-                Statement stmt = conn.createStatement()) {
+             Statement stmt = conn.createStatement()) {
             // create a new table
             stmt.execute(sql);
         } catch (SQLException e) {
@@ -116,7 +95,7 @@ public class LoginController implements Initializable {
                 + " PARENTID       TEXT    NOT NULL)";
 
         try (Connection conn = DriverManager.getConnection(url);
-                Statement stmt = conn.createStatement()) {
+             Statement stmt = conn.createStatement()) {
             // create a new table
             stmt.execute(sql);
         } catch (SQLException e) {
@@ -136,7 +115,7 @@ public class LoginController implements Initializable {
                 + " DURATION     INTEGER  NOT NULL)";
 
         try (Connection conn = DriverManager.getConnection(url);
-                Statement stmt = conn.createStatement()) {
+             Statement stmt = conn.createStatement()) {
             // create a new table
             stmt.execute(sql);
         } catch (SQLException e) {
@@ -150,14 +129,14 @@ public class LoginController implements Initializable {
 
         // SQL statement for creating a new table
         String sql = "CREATE TABLE IF NOT EXISTS CLASSLOG "
-                    + "(STUDENTID        TEXT     NOT NULL,"
-                    + " CLASSID          TEXT     NOT NULL,"
-                    + " DATE             TEXT     NOT NULL,"
-                    + " STUDENTFEEDBACK  TEXT,"
-                    + " PAYMENTSTATUS    NUMERIC  NOT NULL)";
+                + "(STUDENTID        TEXT     NOT NULL,"
+                + " CLASSID          TEXT     NOT NULL,"
+                + " DATE             TEXT     NOT NULL,"
+                + " STUDENTFEEDBACK  TEXT,"
+                + " PAYMENTSTATUS    NUMERIC  NOT NULL)";
 
         try (Connection conn = DriverManager.getConnection(url);
-                Statement stmt = conn.createStatement()) {
+             Statement stmt = conn.createStatement()) {
             // create a new table
             stmt.execute(sql);
         } catch (SQLException e) {
@@ -165,14 +144,33 @@ public class LoginController implements Initializable {
         }
     }
 
-    private void createTables() throws SQLException {
+    @FXML
+    private void closeButtonAction() {
+        // get a handle to the stage
+        Stage stage = (Stage) closeButton.getScene().getWindow();
+        // do what you have to do
+        stage.close();
+    }
+
+    @FXML
+    private void Login(ActionEvent event) throws IOException {
+        if (obj.checkPassword(password.getText())) {
+            createTables();
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("main.fxml"));
+            rootPane.getChildren().setAll(pane);
+        } else {
+            message.setText("Incorrect Password");
+        }
+    }
+
+    private void createTables() {
         createStudentTable();
         createStudentParentRelationshipTable();
         createClassDetailsTable();
         createParentTable();
         createClassLogTable();
     }
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO

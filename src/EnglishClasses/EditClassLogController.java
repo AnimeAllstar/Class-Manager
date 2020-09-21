@@ -5,12 +5,14 @@
  */
 package EnglishClasses;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXDatePicker;
-import com.jfoenix.controls.JFXTextArea;
-import com.jfoenix.controls.JFXTextField;
-import java.io.FileNotFoundException;
+import com.jfoenix.controls.*;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -19,12 +21,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -34,7 +30,10 @@ import javafx.stage.Stage;
 public class EditClassLogController implements Initializable {
 
     EnglishClasses obj = new EnglishClasses();
-
+    boolean isFound;
+    String cId;
+    String sId;
+    String formattedDate;
     @FXML
     private javafx.scene.control.Button closeButton;
     @FXML
@@ -62,7 +61,7 @@ public class EditClassLogController implements Initializable {
     }
 
     @FXML
-    private void changePane(ActionEvent event) throws SQLException, IOException, FileNotFoundException, ClassNotFoundException {
+    private void changePane(ActionEvent event) throws SQLException, IOException {
         JFXButton source = (JFXButton) event.getSource();
         if (source == select) {
             checkClass();
@@ -71,11 +70,6 @@ public class EditClassLogController implements Initializable {
             closeButtonAction();
         }
     }
-
-    boolean isFound;
-    String cId;
-    String sId;
-    String formattedDate;
 
     @FXML
     public void checkClass() throws IOException, SQLException {
@@ -86,7 +80,7 @@ public class EditClassLogController implements Initializable {
 
         String date = null;
         String studentFeedback = null;
-        Integer payment = null;
+        Integer payment;
         String paymentStatus = null;
 
         LocalDate d = this.date.getValue();
@@ -112,13 +106,6 @@ public class EditClassLogController implements Initializable {
                 System.out.println("entered");
 
                 studentFeedback = rs.getString("studentFeedback");
-                payment = rs.getInt("paymentStatus");
-
-                if (payment == 1) {
-                    paymentStatus = "Paid";
-                } else {
-                    paymentStatus = "Not Paid";
-                }
                 isFound = true;
             }
         }
@@ -135,7 +122,7 @@ public class EditClassLogController implements Initializable {
     }
 
     @FXML
-    public void exeUpdate() throws IOException, SQLException {
+    public void exeUpdate() throws SQLException {
         obj.removeClassLog(sId, cId, formattedDate);
         System.out.print("REMOVED");
         int paid = 0;

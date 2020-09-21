@@ -7,14 +7,6 @@ package EnglishClasses;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,6 +16,14 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ResourceBundle;
+
 /**
  * FXML Controller class
  *
@@ -32,19 +32,16 @@ import javafx.stage.Stage;
 public class EditClassController implements Initializable {
 
     EnglishClasses obj = new EnglishClasses();
-
+    String enteredId;
+    Boolean isFound;
     @FXML
     private javafx.scene.control.Button closeButton;
-
     @FXML
     private JFXTextField fee, description, duration, idField;
-
     @FXML
     private JFXButton edit, search;
-
     @FXML
     private Label alert;
-
     @FXML
     private Pane mainPane;
 
@@ -57,7 +54,7 @@ public class EditClassController implements Initializable {
     }
 
     @FXML
-    private void changePane(ActionEvent event) throws SQLException, IOException, FileNotFoundException, ClassNotFoundException {
+    private void changePane(ActionEvent event) throws SQLException, IOException {
         JFXButton source = (JFXButton) event.getSource();
         if (source == edit) {
             String i = (duration.getText()).trim();
@@ -82,18 +79,11 @@ public class EditClassController implements Initializable {
         String f = fee.getText().trim();
         String d = (duration.getText()).trim();
         String s = description.getText().trim();
-        if (f.equals("") || d.equals("") || s.equals("")) {
-            return false;
-        } else {
-            return true;
-        }
+        return !f.equals("") && !d.equals("") && !s.equals("");
     }
 
-    String enteredId;
-    Boolean isFound;
-
     @FXML
-    public void editClass() throws IOException, SQLException {
+    public void editClass() throws SQLException {
         isFound = false;
         System.out.println("run");
         enteredId = idField.getText();

@@ -9,7 +9,14 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
-import java.io.FileNotFoundException;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -20,13 +27,6 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -35,8 +35,9 @@ import javafx.stage.Stage;
  */
 public class AddClassLogController implements Initializable {
 
+    public boolean isFound;
+    public String enteredId;
     EnglishClasses obj = new EnglishClasses();
-
     @FXML
     private javafx.scene.control.Button closeButton;
     @FXML
@@ -47,9 +48,11 @@ public class AddClassLogController implements Initializable {
     private JFXCheckBox paymentStatus;
     @FXML
     private Label alert;
+    @FXML
+    private JFXComboBox studentId;
 
     @FXML
-    private void completeEntry(ActionEvent event) throws SQLException, IOException, FileNotFoundException, ClassNotFoundException {
+    private void completeEntry(ActionEvent event) throws SQLException, IOException {
         if (isFull() && checkClassID()) {
             createStudentClassRelation();
             closeButtonAction();
@@ -58,29 +61,27 @@ public class AddClassLogController implements Initializable {
 
     public boolean isFull() {
         boolean isComboBoxEmpty = studentId.getSelectionModel().isEmpty();
-        
+
         LocalDate d = date.getValue();
         boolean isSelected = false;
-        
+
         String c = classId.getText().trim();
-        
-        if(studentId.isDisabled()){
+
+        if (studentId.isDisabled()) {
             isSelected = true;
-        }else{
-            if(isComboBoxEmpty){
-                isSelected = false;
-            }
+        } else {
+            if (isComboBoxEmpty) isSelected = false;
         }
-        
-        if(studentId.isDisabled()){
-            if(c.equals("")){
+
+        if (studentId.isDisabled()) {
+            if (c.equals("")) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, " ", ButtonType.OK);
-            alert.setTitle("New Class Log Entry");
-            alert.setHeaderText("Empty Text Field");
-            alert.setContentText("Please fiil all text fields marked by *");
-            alert.showAndWait();
-            return false;
-            }else{
+                alert.setTitle("New Class Log Entry");
+                alert.setHeaderText("Empty Text Field");
+                alert.setContentText("Please fiil all text fields marked by *");
+                alert.showAndWait();
+                return false;
+            } else {
                 return true;
             }
         }
@@ -91,22 +92,19 @@ public class AddClassLogController implements Initializable {
             alert.setHeaderText("Empty Text Field");
             alert.setContentText("Please fiil all text fields marked by *");
             alert.showAndWait();
-                    System.out.println("run");
+            System.out.println("run");
 
             return false;
         } else {
-                    System.out.println("run");
+            System.out.println("run");
 
             return true;
         }
-        
+
     }
 
-    public boolean isFound;
-    public String enteredId;
-
     @FXML
-    public boolean checkClassID() throws IOException, SQLException {
+    public boolean checkClassID() throws SQLException {
         isFound = false;
         System.out.println("run");
         enteredId = classId.getText();
@@ -163,9 +161,6 @@ public class AddClassLogController implements Initializable {
         obj.deleteId();
     }
 
-    @FXML
-    private JFXComboBox studentId;
-
     public void loadComboBox() throws SQLException {
         Connection c = obj.connect();
 
@@ -176,8 +171,8 @@ public class AddClassLogController implements Initializable {
             ResultSet rs = c.createStatement().executeQuery(sql);
 
             while (rs.next()) {
-                String item = new StringBuilder().append(rs.getString("FIRSTNAME")).append(" ").append(rs.getString("LASTNAME"))
-                        .append(" - ").append(rs.getString("STUDENTID")).toString();
+                String item = rs.getString("FIRSTNAME") + " " + rs.getString("LASTNAME") +
+                        " - " + rs.getString("STUDENTID");
                 studentId.getItems().add(item);
             }
         } catch (SQLException ex) {
@@ -196,9 +191,7 @@ public class AddClassLogController implements Initializable {
             } else {
                 loadComboBox();
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(AddClassLogController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (SQLException | IOException ex) {
             Logger.getLogger(AddClassLogController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

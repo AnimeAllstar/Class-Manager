@@ -8,7 +8,6 @@ package EnglishClasses;
 import java.time.LocalDate;
 
 /**
- *
  * @author asad
  */
 public class Student {
@@ -59,36 +58,36 @@ public class Student {
         return lastName;
     }
 
-    public String getStandard() {
-        return standard;
-    }
-
-    public LocalDate getDOB() {
-        return (LocalDate) DOB;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public String getSchool() {
-        return school;
-    }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getStandard() {
+        return standard;
     }
 
     public void setStandard(String standard) {
         this.standard = standard;
     }
 
+    public LocalDate getDOB() {
+        return DOB;
+    }
+
     public void setDOB(LocalDate DOB) {
         this.DOB = DOB;
     }
 
+    public String getNotes() {
+        return notes;
+    }
+
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getSchool() {
+        return school;
     }
 
     public void setSchool(String school) {

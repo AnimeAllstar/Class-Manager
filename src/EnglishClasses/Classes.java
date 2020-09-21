@@ -6,7 +6,6 @@
 package EnglishClasses;
 
 /**
- *
  * @author asad
  */
 public class Classes {
@@ -27,28 +26,28 @@ public class Classes {
         return classId;
     }
 
-    public double getFee() {
-        return fee;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
     public void setClassId(String classId) {
         this.classId = classId;
+    }
+
+    public double getFee() {
+        return fee;
     }
 
     public void setFee(double fee) {
         this.fee = fee;
     }
 
+    public String getSummary() {
+        return summary;
+    }
+
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     public void setDuration(int duration) {

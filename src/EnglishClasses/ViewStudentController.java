@@ -9,18 +9,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.LocalDate;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,6 +18,14 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
+import java.sql.*;
+import java.time.LocalDate;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * FXML Controller class
  *
@@ -37,6 +33,17 @@ import javafx.stage.Stage;
  */
 public class ViewStudentController implements Initializable {
 
+    @FXML
+    public JFXTextField idField;
+    public String enteredId = null;
+    public String generatedParentId = null;
+    public Boolean isFound = false;
+    /**
+     * Initializes the controller class.
+     */
+    // ViewStudnetController
+    public boolean isOpen = false;
+    EnglishClasses obj = new EnglishClasses();
     @FXML
     private javafx.scene.control.Button closeButton;
     @FXML
@@ -52,12 +59,12 @@ public class ViewStudentController implements Initializable {
     @FXML
     private Pane mainPane;
     @FXML
-    public JFXTextField idField;
-    @FXML
     private Label alert, sId, pId;
+    private double xOffset = 0;
+    private double yOffset = 0;
 
     @FXML
-    private void newPane(ActionEvent event) throws SQLException, IOException, FileNotFoundException, ClassNotFoundException {
+    private void newPane(ActionEvent event) throws SQLException, IOException {
         JFXButton source = (JFXButton) event.getSource();
         if (source == edit) {
             if (isStudentFull() && isParentFull()) {
@@ -88,7 +95,7 @@ public class ViewStudentController implements Initializable {
         LocalDate sD = sDOB.getValue();
         String sSch = this.sSchool.getText().trim();
 
-        if (sF.equals("") || sL.equals("") || sStan.equals("") || sSch.equals("") || sD.equals(null)) {
+        if (sF.equals("") || sL.equals("") || sStan.equals("") || sSch.equals("") || sD == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR, " ", ButtonType.OK);
             alert.setTitle("New Student Entry");
             alert.setHeaderText("Empty Text Field");
@@ -135,14 +142,10 @@ public class ViewStudentController implements Initializable {
     }
 
     @FXML
-    private void reloadData(ActionEvent event) throws SQLException, IOException, FileNotFoundException, ClassNotFoundException {
+    private void reloadData(ActionEvent event) throws SQLException, IOException {
         getStudent(idField.getText());
         getParent(idField.getText());
     }
-
-    public String enteredId = null;
-    public String generatedParentId = null;
-    public Boolean isFound = false;
 
     @FXML
     public void getStudent(String enteredId) throws IOException, SQLException {
@@ -216,7 +219,7 @@ public class ViewStudentController implements Initializable {
         System.out.println("spRelation accessed successfully");
 
         System.out.println("REQUIRED STUDENT ID = " + enteredId);
-        System.out.println("");
+        System.out.println();
 
         obj.displaySpRelationtData();
 
@@ -268,12 +271,12 @@ public class ViewStudentController implements Initializable {
 
     }
 
-    public void removeStudent(String enteredId) throws SQLException {
+    public void removeStudent(String enteredId) {
 
         String sql = "DELETE FROM STUDENTS WHERE STUDENTID = ?";
 
         try (Connection conn = obj.connect();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the corresponding param
             pstmt.setString(1, enteredId);
@@ -283,7 +286,6 @@ public class ViewStudentController implements Initializable {
             System.out.println("Student removed successfully");
             obj.displayData();
             pstmt.close();
-            conn.close();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -292,7 +294,7 @@ public class ViewStudentController implements Initializable {
 
     public void removeParent(String enteredId) throws SQLException {
 
-        String parentId = null, studentId = enteredId;
+        String parentId = null;
 
         boolean isRepeated = false;
         int count = 0;
@@ -306,12 +308,12 @@ public class ViewStudentController implements Initializable {
 
         while (rs.next()) {
 
-            if (rs.getString("studentid").equalsIgnoreCase(studentId)) {
+            if (rs.getString("studentid").equalsIgnoreCase(enteredId)) {
                 parentId = rs.getString("parentid");
             }
         }
 
-        System.out.println("STUDENT ID = " + studentId);
+        System.out.println("STUDENT ID = " + enteredId);
         System.out.println("FIRST NAME = " + parentId);
 
         //check is parent is repeated
@@ -332,7 +334,7 @@ public class ViewStudentController implements Initializable {
         // set the corresponding param
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             // set the corresponding param
-            pstmt.setString(1, studentId);
+            pstmt.setString(1, enteredId);
             // execute the delete statement
             pstmt.executeUpdate();
 
@@ -343,7 +345,7 @@ public class ViewStudentController implements Initializable {
         }
 
         //Delete Parent table reocrd
-        if (isRepeated == false) {
+        if (!isRepeated) {
             sql = "DELETE FROM PARENTS WHERE PARENTID = ?";
 
             // set the corresponding param
@@ -364,16 +366,13 @@ public class ViewStudentController implements Initializable {
     }
 
     @FXML
-    private void changePane(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
+    private void changePane(ActionEvent event) throws IOException, SQLException {
         getStudent(idField.getText());
         if (isFound) {
             getParent(idField.getText());
             mainPane.toFront();
         }
     }
-
-    private double xOffset = 0;
-    private double yOffset = 0;
 
     /*@FXML
     private void addStudent() throws SQLException {
@@ -387,12 +386,6 @@ public class ViewStudentController implements Initializable {
         stage.close();
     }
 
-    /**
-     * Initializes the controller class.
-     */
-    // ViewStudnetController
-    public boolean isOpen = false;
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
@@ -405,9 +398,7 @@ public class ViewStudentController implements Initializable {
                     mainPane.toFront();
                     idField.setText(obj.getId());
                     obj.deleteId();
-                } catch (IOException ex) {
-                    Logger.getLogger(ViewStudentController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
+                } catch (IOException | SQLException ex) {
                     Logger.getLogger(ViewStudentController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
@@ -418,6 +409,4 @@ public class ViewStudentController implements Initializable {
             Logger.getLogger(ViewStudentController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    EnglishClasses obj = new EnglishClasses();
 }

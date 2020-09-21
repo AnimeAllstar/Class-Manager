@@ -9,15 +9,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.LocalDate;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,6 +18,15 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDate;
+import java.util.ResourceBundle;
+
 /**
  * FXML Controller class
  *
@@ -34,32 +34,26 @@ import javafx.stage.Stage;
  */
 public class EditStudentController implements Initializable {
 
+    public String enteredId = null;
+    public String generatedParentId = null;
+    public Boolean isFound = false;
     EnglishClasses obj = new EnglishClasses();
-
     @FXML
     private javafx.scene.control.Button closeButton;
-
     @FXML
     private Label alert;
-
     @FXML
     private JFXTextField idField;
-
     @FXML
     private Pane paneStudent, paneParent, panId;
-
     @FXML
     private JFXButton next, back, finish, edit;
-
     @FXML
     private JFXTextField firstName, lastName, standard, school;
-
     @FXML
     private JFXTextField parentFirstName, parentLastName, parentContact, parentEmail;
-
     @FXML
     private JFXTextArea notes;
-
     @FXML
     private JFXDatePicker DOB;
 
@@ -72,7 +66,7 @@ public class EditStudentController implements Initializable {
     }
 
     @FXML
-    private void changePane(ActionEvent event) throws SQLException, IOException, FileNotFoundException, ClassNotFoundException {
+    private void changePane(ActionEvent event) throws SQLException, IOException {
         JFXButton source = (JFXButton) event.getSource();
         if (source == edit) {
             editStudent();
@@ -105,7 +99,7 @@ public class EditStudentController implements Initializable {
         LocalDate sD = DOB.getValue();
         String sSchool = school.getText().trim();
 
-        if (sF.equals("") || sL.equals("") || sStandard.equals("") || sSchool.equals("") || sD.equals(null)) {
+        if (sF.equals("") || sL.equals("") || sStandard.equals("") || sSchool.equals("") || sD == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR, " ", ButtonType.OK);
             alert.setTitle("New Student Entry");
             alert.setHeaderText("Empty Text Field");
@@ -135,12 +129,8 @@ public class EditStudentController implements Initializable {
         }
     }
 
-    public String enteredId = null;
-    public String generatedParentId = null;
-    public Boolean isFound = false;
-
     @FXML
-    public void editStudent() throws IOException, SQLException {
+    public void editStudent() throws SQLException {
         isFound = false;
         System.out.println("run");
         enteredId = idField.getText();
@@ -216,7 +206,7 @@ public class EditStudentController implements Initializable {
     }
 
     @FXML
-    public void editParent() throws IOException, SQLException {
+    public void editParent() throws SQLException {
 
         //SCANNING SPRELATION TABLE FOR MATCHING PARNET ID
         String parentId = null, studentId = null;
@@ -229,7 +219,7 @@ public class EditStudentController implements Initializable {
         System.out.println("spRelation accessed successfully");
 
         System.out.println("REQUIRED STUDENT ID = " + enteredId);
-        System.out.println("");
+        System.out.println();
 
         obj.displaySpRelationtData();
 

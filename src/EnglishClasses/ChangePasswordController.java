@@ -6,14 +6,15 @@
 package EnglishClasses;
 
 import com.jfoenix.controls.JFXTextField;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * FXML Controller class
@@ -26,6 +27,10 @@ public class ChangePasswordController implements Initializable {
 
     @FXML
     private javafx.scene.control.Button closeButton;
+    @FXML
+    private JFXTextField newPassword, oldPassword;
+    @FXML
+    private Label message;
 
     @FXML
     private void closeButtonAction() {
@@ -34,12 +39,6 @@ public class ChangePasswordController implements Initializable {
         // do what you have to do
         stage.close();
     }
-
-    @FXML
-    private JFXTextField newPassword, oldPassword;
-
-    @FXML
-    private Label message;
 
     @FXML
     private void changePassword(ActionEvent event) throws IOException {

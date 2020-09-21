@@ -7,6 +7,12 @@ package EnglishClasses;
 
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -15,11 +21,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -29,7 +30,10 @@ import javafx.stage.Stage;
 public class RemoveClassLogController implements Initializable {
 
     EnglishClasses obj = new EnglishClasses();
-
+    boolean isFound;
+    String cId;
+    String sId;
+    String formattedDate;
     @FXML
     private javafx.scene.control.Button closeButton;
     @FXML
@@ -46,11 +50,6 @@ public class RemoveClassLogController implements Initializable {
         // do what you have to do
         stage.close();
     }
-
-    boolean isFound;
-    String cId;
-    String sId;
-    String formattedDate;
 
     @FXML
     public void checkClass(ActionEvent event) throws IOException, SQLException {

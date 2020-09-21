@@ -5,41 +5,43 @@
  */
 package EnglishClasses;
 
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.sql.*;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
- *
  * @author Asad
  */
 public class EnglishClasses extends Application {
+
+    public final static String emailRegex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+    public final static String phoneRegex = "^[0-9]{10}$";
+    public final static String nameRegex = "^[\\p{L} .'-]+$";
+    public static Pattern emailPattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
+    public static Pattern phonePattern = Pattern.compile(phoneRegex);
+    public static Pattern namePattern = Pattern.compile(nameRegex, Pattern.CASE_INSENSITIVE);
+    public Matcher matcher;
+    private double xOffset = 0;
+    private double yOffset = 0;
 
     /**
      * @param args the command line arguments
@@ -52,15 +54,6 @@ public class EnglishClasses extends Application {
     public void start(Stage stage) throws Exception {
         newWindow("Login");
     }
-
-    public final static String emailRegex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
-    public static Pattern emailPattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
-    public final static String phoneRegex = "^[0-9]{10}$";
-    public static Pattern phonePattern = Pattern.compile(phoneRegex);
-    public final static String nameRegex = "^[\\p{L} .'-]+$";
-    public static Pattern namePattern = Pattern.compile(nameRegex, Pattern.CASE_INSENSITIVE);
-
-    public Matcher matcher;
 
     public boolean validateEmail(String email) {
         matcher = emailPattern.matcher(email.trim());
@@ -99,11 +92,7 @@ public class EnglishClasses extends Application {
 
         LocalDate rn = LocalDate.now();
 
-        if (d.isAfter(rn)) {
-            return false;
-        } else {
-            return true;
-        }
+        return !d.isAfter(rn);
     }
 
     public boolean validateStudent(String f, String l, LocalDate d) {
@@ -168,9 +157,6 @@ public class EnglishClasses extends Application {
         }
     }
 
-    private double xOffset = 0;
-    private double yOffset = 0;
-
     public void newWindow(String name) throws IOException {
         Stage stage = new Stage();
         Parent root = FXMLLoader.load(getClass().getResource(name + ".fxml"));
@@ -178,19 +164,13 @@ public class EnglishClasses extends Application {
         root.setStyle("-fx-background-color: transparent;");
         stage.initStyle(StageStyle.UNDECORATED);
 
-        root.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                xOffset = event.getSceneX();
-                yOffset = event.getSceneY();
-            }
+        root.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
         });
-        root.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                stage.setX(event.getScreenX() - xOffset);
-                stage.setY(event.getScreenY() - yOffset);
-            }
+        root.setOnMouseDragged(event -> {
+            stage.setX(event.getScreenX() - xOffset);
+            stage.setY(event.getScreenY() - yOffset);
         });
 
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -203,7 +183,7 @@ public class EnglishClasses extends Application {
     }
 
     //Checking Password from RandomAccessFile
-    public boolean checkPassword(String entered) throws FileNotFoundException, IOException {
+    public boolean checkPassword(String entered) throws IOException {
 
         RandomAccessFile raf = new RandomAccessFile("loginDetails.txt", "r");
         raf.seek(0);
@@ -212,11 +192,7 @@ public class EnglishClasses extends Application {
 
         raf.close();
 
-        if (entered.equals(pass)) {
-            return true;
-        } else {
-            return false;
-        }
+        return entered.equals(pass);
     }
 
     public void deletePassword() throws IOException {
@@ -236,7 +212,7 @@ public class EnglishClasses extends Application {
         out.close();
     }
 
-    public void setPassword(String newPassword) throws FileNotFoundException, IOException {
+    public void setPassword(String newPassword) throws IOException {
 
         byte[] pass = newPassword.getBytes();
 
@@ -254,7 +230,7 @@ public class EnglishClasses extends Application {
     public Connection connect() {
         // SQLite connection string
         String url = "jdbc:sqlite:database.db";
-        Connection conn = null;
+        Connection conn;
         try {
             conn = DriverManager.getConnection(url);
             return conn;
@@ -268,7 +244,7 @@ public class EnglishClasses extends Application {
         String sql = "INSERT INTO STUDENTS(STUDENTID,FIRSTNAME,LASTNAME,STANDARD,DOB,SCHOOL,NOTES) VALUES(?,?,?,?,?,?,?)";
 
         try (Connection conn = connect();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, id);
             pstmt.setString(2, fname);
             pstmt.setString(3, lname);
@@ -280,7 +256,6 @@ public class EnglishClasses extends Application {
             pstmt.executeUpdate();
 
             pstmt.close();
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -289,11 +264,11 @@ public class EnglishClasses extends Application {
 
     }
 
-    public void addparent(String id, String fname, String lname, String contact, String email) throws SQLException {
+    public void addparent(String id, String fname, String lname, String contact, String email) {
         String sql = "INSERT INTO PARENTS(PARENTID,FIRSTNAME,LASTNAME,CONTACT,EMAIL) VALUES(?,?,?,?,?)";
 
         try (Connection conn = connect();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, id);
             pstmt.setString(2, fname);
             pstmt.setString(3, lname);
@@ -303,7 +278,6 @@ public class EnglishClasses extends Application {
             pstmt.executeUpdate();
 
             pstmt.close();
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -312,11 +286,11 @@ public class EnglishClasses extends Application {
 
     }
 
-    public void addClass(String classId, double fee, String summary, int duration) throws SQLException {
+    public void addClass(String classId, double fee, String summary, int duration) {
         String sql = "INSERT INTO CLASSES (CLASSID,FEE,SUMMARY,DURATION) VALUES(?,?,?,?)";
 
         try (Connection conn = connect();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, classId);
             pstmt.setDouble(2, fee);
             pstmt.setString(3, summary);
@@ -325,7 +299,6 @@ public class EnglishClasses extends Application {
             pstmt.executeUpdate();
 
             pstmt.close();
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -334,11 +307,11 @@ public class EnglishClasses extends Application {
 
     }
 
-    public void createStudentParentRelation(String sId, String pId) throws SQLException {
+    public void createStudentParentRelation(String sId, String pId) {
         String sql = "INSERT INTO SPRELATION(STUDENTID,PARENTID) VALUES(?,?)";
 
         try (Connection conn = connect();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             System.out.println(sId + ", " + pId);
             pstmt.setString(1, sId);
             pstmt.setString(2, pId);
@@ -346,7 +319,6 @@ public class EnglishClasses extends Application {
             pstmt.executeUpdate();
 
             pstmt.close();
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -355,12 +327,12 @@ public class EnglishClasses extends Application {
 
     }
 
-    public void createStudentClassRelation(String sId, String cId, LocalDate date, String studentFeedback, int PaymentStatus) throws SQLException {
+    public void createStudentClassRelation(String sId, String cId, LocalDate date, String studentFeedback, int PaymentStatus) {
 
         String sql = "INSERT INTO CLASSLOG(STUDENTID,CLASSID,DATE,STUDENTFEEDBACK,PAYMENTSTATUS) VALUES(?,?,?,?,?)";
 
         try (Connection conn = connect();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             System.out.println(sId + ", " + cId);
             pstmt.setString(1, sId);
             pstmt.setString(2, cId);
@@ -371,7 +343,6 @@ public class EnglishClasses extends Application {
             pstmt.executeUpdate();
 
             pstmt.close();
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -380,11 +351,11 @@ public class EnglishClasses extends Application {
 
     }
 
-    public boolean removeStudent(String enteredId) throws SQLException {
+    public boolean removeStudent(String enteredId) {
         String sql = "DELETE FROM STUDENTS WHERE STUDENTID = ?";
 
         try (Connection conn = connect();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the corresponding param
             pstmt.setString(1, enteredId);
@@ -405,11 +376,11 @@ public class EnglishClasses extends Application {
 
     }
 
-    public boolean removeClass(String enteredId) throws SQLException {
+    public boolean removeClass(String enteredId) {
         String sql = "DELETE FROM CLASSES WHERE CLASSID = ?";
 
         try (Connection conn = connect();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the corresponding param
             pstmt.setString(1, enteredId);
@@ -429,12 +400,12 @@ public class EnglishClasses extends Application {
         return false;
     }
 
-    public boolean removeClassLog(String sId, String cId, String date) throws SQLException {
+    public boolean removeClassLog(String sId, String cId, String date) {
         System.out.println(sId);
         String sql = "DELETE FROM CLASSLOG WHERE STUDENTID = ? AND CLASSID = ? AND DATE = ?";
 
         try (Connection conn = connect();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the corresponding param
             pstmt.setString(1, sId);
@@ -460,7 +431,8 @@ public class EnglishClasses extends Application {
 
     public void removeParent(String enteredId) throws SQLException {
 
-        String parentId = null, studentId = enteredId;
+        String parentId = null;
+        String studentId = enteredId;
 
         boolean isRepeated = false;
         int count = 0;
@@ -585,9 +557,9 @@ public class EnglishClasses extends Application {
         System.out.println("Operation done successfully");
     }
 
-    public void displayParentData() throws SQLException {
-        Connection c = null;
-        Statement stmt = null;
+    public void displayParentData() {
+        Connection c;
+        Statement stmt;
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:database.db");
@@ -622,9 +594,9 @@ public class EnglishClasses extends Application {
         System.out.println("Operation done successfully");
     }
 
-    public void displaySpRelationtData() throws SQLException {
-        Connection c = null;
-        Statement stmt = null;
+    public void displaySpRelationtData() {
+        Connection c;
+        Statement stmt;
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:database.db");
@@ -653,9 +625,9 @@ public class EnglishClasses extends Application {
         System.out.println("Operation done successfully");
     }
 
-    public void displayScRelationtData() throws SQLException {
+    public void displayScRelationtData() {
         Connection c = connect();
-        Statement stmt = null;
+        Statement stmt;
         try {
             System.out.println("Opened database successfully");
 
@@ -687,7 +659,7 @@ public class EnglishClasses extends Application {
         System.out.println("Operation done successfully");
     }
 
-    public String getId() throws FileNotFoundException, IOException {
+    public String getId() throws IOException {
 
         RandomAccessFile raf = new RandomAccessFile("id.txt", "r");
         raf.seek(0);
@@ -701,7 +673,7 @@ public class EnglishClasses extends Application {
 
     public void setId(String id) {
         try {
-            byte[] i = new byte[6];
+            byte[] i;
             i = id.getBytes();
 
             RandomAccessFile raf = new RandomAccessFile("id.txt", "rw");
