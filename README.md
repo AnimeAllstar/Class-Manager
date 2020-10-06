@@ -1,4 +1,4 @@
-#### Password : LoginDetails.txt
+#### Check 'LoginDetails.txt' for default password
 
 # Java Class Manager
 
