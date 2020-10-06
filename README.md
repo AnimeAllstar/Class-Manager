@@ -1,3 +1,5 @@
+#### Password : LoginDetails.txt
+
 # Java Class Manager
 
 Class management software for teachers made using JavaFX and SQLite
